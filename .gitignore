@@ -1,2 +1,5 @@
 tags
 virtualenv_run/
+email_to_photo.json
+client_id.json
+client_secret.json
