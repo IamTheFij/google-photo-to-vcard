@@ -12,6 +12,8 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 
+from google_photo_to_vcard.util import write_email_photo_json
+
 try:
     import argparse
     flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
@@ -68,11 +70,6 @@ def get_all_results(api, request, key='connections'):
         request = api.list_next(request, results)
         if not request:
             logging.info('No next page :(')
-
-
-def write_map_to_file(email_to_photo):
-    with open('email_to_photo.json', 'w') as f:
-        f.write(json.dumps(email_to_photo))
 
 
 def get_credentials():
@@ -164,7 +161,7 @@ def main():
             ))
 
     # pprint(email_to_photo)
-    write_map_to_file(email_to_photo)
+    write_email_photo_json(email_to_photo)
     print('All done!')
 
 

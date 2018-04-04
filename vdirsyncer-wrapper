@@ -1,0 +1,5 @@
+#! /bin/bash
+# vdirsyncer-wrapper
+# Wrapper around vdirsyncer that executes it from within virtualenv using local config
+
+./virtualenv_run/bin/vdirsyncer -c ./vdirsyncer.conf $*
