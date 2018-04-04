@@ -1,10 +1,8 @@
-from __future__ import print_function
 import httplib2
 import json
 import logging
 import os
 import time
-from pprint import pprint
 
 from apiclient import discovery
 from googleapiclient.errors import HttpError
@@ -99,7 +97,7 @@ def get_credentials():
             credentials = tools.run_flow(flow, store, flags)
         else:  # Needed only for compatibility with Python 2.6
             credentials = tools.run(flow, store)
-        print('Storing credentials to ' + credential_path)
+        logging.info('Storing credentials to ' + credential_path)
     return credentials
 
 
@@ -160,9 +158,12 @@ def main():
                 len(email_to_photo),
             ))
 
-    # pprint(email_to_photo)
     write_email_photo_json(email_to_photo)
-    print('All done!')
+    logging.info('All done!')
+    logging.info('Found {} photos for {} emails'.format(
+        len(all_photos),
+        len(email_to_photo),
+    ))
 
 
 if __name__ == '__main__':

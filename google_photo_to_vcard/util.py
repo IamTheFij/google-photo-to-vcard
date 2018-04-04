@@ -1,4 +1,5 @@
 import json
+import logging
 import urllib.request as request
 from urllib.error import HTTPError
 
@@ -26,5 +27,5 @@ def download_url_to_path(url, path):
             f.write(r.read())
             return path
     except HTTPError as e:
-        print(e)
+        logging.error(e)
         return None

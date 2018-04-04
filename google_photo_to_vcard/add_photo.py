@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import vobject
@@ -7,6 +8,9 @@ from google_photo_to_vcard.util import download_url_to_path
 from google_photo_to_vcard.util import read_email_photo_json
 
 
+logging.basicConfig(level=logging.DEBUG)
+
+
 def open_card(card_path):
     with open(card_path, mode='r') as f:
         return vobject.readOne(f.read())
@@ -14,7 +18,7 @@ def open_card(card_path):
 
 def maybe_add_photo(card, photo_path):
     if hasattr(card, 'photo'):
-        print('{} has photo'.format(card.fn.value))
+        logging.info('%s has photo', card.fn.value)
         return False
     photo = card.add('photo')
     photo.params = {
@@ -56,7 +60,7 @@ def main():
             if photo_path.exists():
                 if maybe_add_photo(card, photo_path):
                     write_card_to_path(card, card_path)
-                    print('Added photo to', card.fn.value)
+                    logging.info('Added photo to %s', card.fn.value)
 
 
 if __name__ == '__main__':
