@@ -141,8 +141,13 @@ def main():
     for person in connections:
         count += 1
 
+        logging.debug('Processing %s', person.get('resourceName'))
         primary_photo = get_primary_photo(person)
         if not primary_photo:
+            logging.debug('No photo for person')
+            continue
+        if primary_photo.endswith('__8B/s100/photo.jpg'):
+            logging.debug('Skipping stupid default letter picture')
             continue
 
         emails = person.get('emailAddresses', [])
@@ -151,6 +156,8 @@ def main():
 
         for email in emails:
             email_to_photo[email['value']] = primary_photo
+
+        logging.debug('Added photos for person')
 
         if count % 50 == 0:
             logging.info('Found {} photos for {} emails'.format(

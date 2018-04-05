@@ -1,8 +1,5 @@
 .PHONY: default
-default: run
-
-.PHONY: run
-run: email_to_photo.json
+default: add-photos
 
 virtualenv: virtualenv_run
 
@@ -17,14 +14,12 @@ build/email_to_photo.json: virtualenv_run
 build/vdirsyncer: virtualenv_run
 	./vdirsyncer-wrapper discover
 
-build/vdirsyncer/status/my_contacts/contacts.items: build/vdirsyncer
+build/contacts/contacts/DOWNLOADED: build/vdirsyncer
 	./vdirsyncer-wrapper sync
-
-.PHONY: sync-contacts
-sync-contacts: build/vdirsyncer/status/my_contacts/contacts.items
+	touch build/contacts/contacts/DOWNLOADED
 
 .PHONY: khard-list
-khard-list: build/vdirsyncer/status/my_contacts/contacts.items
+khard-list: build/contacts/contacts/DOWNLOADED
 	./khard-wrapper list
 
 build/photos/DONE: build/email_to_photo.json
@@ -32,6 +27,14 @@ build/photos/DONE: build/email_to_photo.json
 	touch build/photos/DONE
 
 .PHONY: add-photos
-add-photos: virtualenv_run build/email_to_photo.json build/vdirsyncer/status/my_contacts/contacts.items
+add-photos: virtualenv_run build/email_to_photo.json build/contacts/contacts/DOWNLOADED
 	mkdir -p build/photos
 	./virtualenv_run/bin/python -m google_photo_to_vcard.add_photo
+
+.PHONY: clean-build
+clean-build:
+	rm -fr build/
+
+.PHONY: sync-contacts
+sync-contacts: build/vdirsyncer
+	./vdirsyncer-wrapper sync
