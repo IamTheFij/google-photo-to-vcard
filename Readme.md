@@ -2,6 +2,8 @@
 
 A set of scripts to download profile images from Google and write them to vcards. Useful for completing the migration from Google to Nextcloud or ownCloud.
 
+As a fallback, if a user doesn't have a Google profile photo, the script will check [Gravatar](https://www.gravatar.com).
+
 ## Setup
 
 To run, you first need to set up a few config files

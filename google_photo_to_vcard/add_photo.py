@@ -5,6 +5,7 @@ import vobject
 
 from google_photo_to_vcard.util import build_photo_path
 from google_photo_to_vcard.util import download_url_to_path
+from google_photo_to_vcard.util import generate_gravatar_url
 from google_photo_to_vcard.util import read_email_photo_json
 
 
@@ -52,15 +53,25 @@ def generate_cards():
 def main():
     email_to_photo = read_email_photo_json()
     for card, card_path in generate_cards():
+        if hasattr(card, 'photo'):
+            logging.info('%s has photo', card.fn.value)
+            continue
         for email_elem in card.contents.get('email', []):
             email = email_elem.value
             photo_path = Path(build_photo_path(email))
-            if not photo_path.exists() and email in email_to_photo:
-                download_url_to_path(email_to_photo[email], photo_path)
+            if not photo_path.exists():
+                if email in email_to_photo:
+                    logging.debug('Downloading google photo for %s', card.fn.value)
+                    download_url_to_path(email_to_photo[email], photo_path)
+                else:
+                    logging.debug('Downloading Gravatar photo for %s', card.fn.value)
+                    gravatar_url = generate_gravatar_url(email)
+                    download_url_to_path(gravatar_url, photo_path)
             if photo_path.exists():
                 if maybe_add_photo(card, photo_path):
                     write_card_to_path(card, card_path)
                     logging.info('Added photo to %s', card.fn.value)
+                    break
 
 
 if __name__ == '__main__':
