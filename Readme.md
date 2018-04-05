@@ -26,12 +26,12 @@ Edit ./vdirsyncer.conf.example adding your server url, username, and password in
 
 Once your configuration is set up, you should be able to download and add photos to all your contacts by executing:
 
-```
+```bash
 make add-photos
 ```
 
 It's then worth taking a look and making sure that the results are as you expected. When you're happy with them, you can push the contacts back up to your remote server by running:
 
-```
+```bash
 make sync-contacts
 ```
