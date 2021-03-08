@@ -129,7 +129,7 @@ def main():
         request=service.people().connections().list(
             resourceName='people/me',
             pageSize=100,
-            personFields='emailAddresses,photos',
+            personFields='emailAddresses,photos,names',
         ),
         key='connections',
     )
@@ -141,7 +141,15 @@ def main():
     for person in connections:
         count += 1
 
-        logging.debug('Processing %s', person.get('resourceName'))
+        displayName = "Unknown"
+        if "names" in person:
+            displayName = person['names'][0]['displayName']
+
+        logging.info(
+            'Processing %s: %s',
+            person.get('resourceName'),
+            displayName,
+        )
         primary_photo = get_primary_photo(person)
         if not primary_photo:
             logging.debug('No photo for person')
@@ -153,11 +161,12 @@ def main():
         emails = person.get('emailAddresses', [])
         if emails:
             all_photos.add(primary_photo)
+        else:
+            logging.debug("No email for person")
 
         for email in emails:
             email_to_photo[email['value']] = primary_photo
-
-        logging.debug('Added photos for person')
+            logging.debug('Added photos for email %s', email['value'])
 
         if count % 50 == 0:
             logging.info('Found {} photos for {} emails'.format(

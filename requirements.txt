@@ -1,3 +1,4 @@
 google-api-python-client
 khard
 vdirsyncer
+oauth2client

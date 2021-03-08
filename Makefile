@@ -4,7 +4,7 @@ default: add-photos
 virtualenv: virtualenv_run
 
 virtualenv_run:
-	virtualenv --python python3 virtualenv_run
+	virtualenv --python python3.7 virtualenv_run
 	./virtualenv_run/bin/pip install -r ./requirements.txt
 
 build/email_to_photo.json: virtualenv_run
